@@ -1,0 +1,47 @@
+1:redis的五种基础数据类型String,List(数据可重复),Set(无序),Hash,Zset(有序)
+
+	1-1:基础命令行操作String	set age 12
+								get age
+								del age
+	
+	1-2:基础命令行操作List		lpush/rpush(左右两端插入数据)						
+								lrange(获得指定范围的数据[0,-1]将获得全部)				
+								lindex(获得指定某个下标位置的值)		
+								lpop/rpop(弹出两端值)
+								
+	1-3:基础命令行操作Set		
+								sadd(向集合中添加数据,若数据已存在则会返回0)		
+								smembers(获得集合的所有数据)							
+								sismember(检查某值是否存在于集合中)		
+								srem(集合中删除某个值)
+								
+	1-4:基础命令行操作Hash		
+								hset person name tom(name不可重复,name值会被修改)	
+								hgetall(获得所有的属性和属性值)							
+								hdel person name(删除某个属性)
+								
+	1-5:基础命令行操作Zset		
+								zadd class 100 student(会根据添加的100排序)			
+								zrange class 0 -1 withscores(会根据scores排序查询)
+								zrangebyscore class 0 80 withscores(根据区间查询)
+								zrem class student1(删除)
+
+2:Python中使用redis模块一些基础操作
+	2-1:链接redis的方式之一		conn = redis.Redis(host="127.0.0.1", port=6379, password="123456")
+	2-1-1:添加一个string类型	conn.set("name","tom")	
+								其它参数: 
+									ex=100[100秒过期]	
+									px=100[100毫秒过期]	
+									nx[为true时只有"name"不存在才会执行,存在则新值不会被更新]
+									xx[为true时只有"name"存在才会执行]
+									
+	2-1-2:批量添加/获得string类型	conn.mset({'k1': 'v1', "k2": 'v2'})		该方法无法设置过期时间等信息？
+									conn.mget({"k1", "k2"})					批量获得
+	2-1-3:设置值并且返回原始值		conn.getset("key1", "new k1")			如果key不存在,将会新建,返回NONE
+	2-1-3:截取值得部分				conn.getrange("k1", 0, 3)				返回new		[0, -1]获得全部		conn.getrange("k1", -6, -1)一样可以获得。需要研究截取策略   
+	2-1-4:从指定位置开始修改值		conn.setrange("k1", 3, "22222")			返回修改后长度
+	2-1-5:字符串长度				conn.strlen("k1")						11
+	2-1-6:自增						conn.incr("int",amount=2)				amount 步长		不写默认为1
+									conn.incrbyfloat("int",amount=1.5)		步长为浮点数
+	2-1-7:自减						conn.decr()
+	2-1-8:追加						conn.append("name","lisi")				
