@@ -1,5 +1,6 @@
-1:redis�����ֻ�����������String,List(���ݿ��ظ�),Set(����),Hash,Zset(����)
+1:redis的五种基础数据类型String,List(数据可重复),Set(无序),Hash,Zset(有序)
 
+<<<<<<< HEAD
 	1-1:���������в���String	set age 12
 								get age
 								del age
@@ -92,3 +93,86 @@
 	conn.rename("class", "classNew")		������key,����ͼ������һ�������ڵ�key�򱨴�
 	conn.type("classNew")					���key��ֵ����
 	
+=======
+	1-1:基础命令行操作String				  set age 12
+								get age
+								del age
+	
+	1-2:基础命令行操作List					  lpush/rpush(左右两端插入数据)						
+								lrange(获得指定范围的数据[0,-1]将获得全部)				
+								lindex(获得指定某个下标位置的值)		
+								lpop/rpop(弹出两端值)
+								
+	1-3:基础命令行操作Set		
+								sadd(向集合中添加数据,若数据已存在则会返回0)		
+								smembers(获得集合的所有数据)							
+								sismember(检查某值是否存在于集合中)		
+								srem(集合中删除某个值)
+								
+	1-4:基础命令行操作Hash		
+								hset person name tom(name不可重复,name值会被修改)	
+								hgetall(获得所有的属性和属性值)							
+								hdel person name(删除某个属性)
+								
+	1-5:基础命令行操作Zset		
+								zadd class 100 student(会根据添加的100排序)			
+								zrange class 0 -1 withscores(会根据scores排序查询)
+								zrangebyscore class 0 80 withscores(根据区间查询)
+								zrem class student1(删除)
+
+2:Python中使用redis模块一些基础操作
+	2-1:链接redis的方式之一				  conn = redis.Redis(host="127.0.0.1", port=6379, password="123456")
+	
+	2-2-1:添加一个string类型				  conn.set("name","tom")	
+								其它参数: 
+									ex=100[100秒过期]	
+									px=100[100毫秒过期]	
+									nx[为true时只有"name"不存在才会执行,存在则新值不会被更新]
+									xx[为true时只有"name"存在才会执行]
+									
+	2-2-2:批量添加/获得string类型	conn.mset({'k1': 'v1', "k2": 'v2'})		该方法无法设置过期时间等信息？
+									conn.mget({"k1", "k2"})				批量获得
+	2-2-3:设置值并且返回原始值		conn.getset("key1", "new k1")			如果key不存在,将会新建,返回NONE
+	2-2-3:截取值得部分				conn.getrange("k1", 0, 3)			返回new		[0, -1]获得全部		conn.getrange("k1", -6, -1)一样可以获得。需要研究截取策略   
+	2-2-4:从指定位置开始修改值		conn.setrange("k1", 3, "22222")			返回修改后长度
+	2-2-5:字符串长度				conn.strlen("k1")				11
+	2-2-6:自增						conn.incr("int",amount=2)			amount 步长		不写默认为1
+									conn.incrbyfloat("int",amount=1.5)		步长为浮点数
+	2-2-7:自减						conn.decr()
+	2-2-8:追加						conn.append("name","lisi")
+	
+	2-3-1:添加一个hash				conn.hset("person", "name", "tom")
+	2-3-2:获得字典所有的字段与值	conn.hgetall("person")										获得指定:conn.hget("person", "age")
+	2-3-3:批量创建					conn.hmset("newPerson", {"name": "tonynew", "age": "new"})	批量获得:conn.hmget("newPerson", {"name", "age"})
+	2-3-4:获得字典字段数量长度		conn.hlen("newPerson")
+	2-3-5:判断是否存在某键			conn.hexists("newPerson", "sex")
+	2-3-6:删除某键					conn.hdel("newPerson", "sex")
+	2-3-7:键值自增					conn.hincrby("school", "clazz", amount=1)
+									conn.hincrbyfloat("school", "clazz", amount=0.4)
+									
+	2-4-1:添加一个Listt						conn.lpush("like", "1", "2", "3")	conn.rpush("like", "4")		3,2,1,4
+	2-4-2:左右端添加且键存在				conn.lpushx conn.rpushx
+	2-4-3:获得list长度						conn.llen("like")
+	2-4-4:在insert1之前插入insert0			conn.linsert("like", "before", "insert1", "insert0")
+	2-4-5:通过下标修改某值					conn.lset("like", 0, "new")
+	2-4-6:删除包含insert0的后两位 			conn.lrem("like", 2, "insert0")
+	2-4-7:左右两端弹出						conn.lpop("like")	conn.rpop("like")
+	2-4-8:通过下标获得						conn.lindex("like", 1)
+	2-4-9:通过下标范围获得					conn.lrange("like", 0, 3)
+	2-4-10:会清空不在指定下标范围内的数据	conn.ltrim("like", 0, 3)
+	
+	2-5-1:添加一个set(无序且值不能重复)			conn.sadd("clazz", "tom", "tony", "eric", "tony")
+	2-5-2:获得集合所有的值					conn.smembers("clazz")
+	2-5-3:判断是否存在某值					conn.sismember("clazz", "tom")
+	2-5-4:集合长度							conn.scard("clazz")
+	2-5-5:比较多集合的不同值				conn.sdiff("clazz", "clazz1", "clazz2")
+	2-5-6:比较多集合的相同值				conn.sinter("clazz", "clazz1", "clazz2")
+	2-5-7:弹出右侧							conn.spop("clazz1")
+	2-5-8:随机取出两个值					conn.srandmember("clazz1", 2)
+	2-5-8:删除某值							conn.srem("clazz1", "tom2")
+	
+	2-6-1:添加一个有序集合					conn.zadd("item", {"v1": 1, "v2": 2, "v3": 3})
+	2-6-2:获得集合长度						conn.zcard("item")
+	2-6-3:获得集合中1到1.5的值				conn.zcount("item", 0, 1.5)
+	
+>>>>>>> 5bea84e44005d69983b528dd37a92094b0272023
