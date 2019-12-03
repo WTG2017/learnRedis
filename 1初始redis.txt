@@ -67,7 +67,7 @@
 	2-4-9:通过下标范围获得					conn.lrange("like", 0, 3)
 	2-4-10:会清空不在指定下标范围内的数据	conn.ltrim("like", 0, 3)
 	
-	2-5-1:添加一个set(无序且值不能重复)			conn.sadd("clazz", "tom", "tony", "eric", "tony")
+	2-5-1:添加一个set(无序且值不能重复)		conn.sadd("clazz", "tom", "tony", "eric", "tony")
 	2-5-2:获得集合所有的值					conn.smembers("clazz")
 	2-5-3:判断是否存在某值					conn.sismember("clazz", "tom")
 	2-5-4:集合长度							conn.scard("clazz")
@@ -80,4 +80,15 @@
 	2-6-1:添加一个有序集合					conn.zadd("item", {"v1": 1, "v2": 2, "v3": 3})
 	2-6-2:获得集合长度						conn.zcard("item")
 	2-6-3:获得集合中1到1.5的值				conn.zcount("item", 0, 1.5)
+	2-6-4:下标获得							conn.zrange("class", 0, 2)
+											conn.zrevrange("class", 0, 2)    从大到小排序返回
+	2-6-5:根据分值区间查询 					conn.zrangebyscore("class", 80, 90)
+	2-6-6:根据分值区间删除					conn.zremrangebyscore("class", 80, 90)
+	
+3:其它基础操作
+	conn.delete("hi")						删除指定key
+	conn.exists("hi")						指定key是否存在
+	conn.randomkey()						随机取出当前存在的key
+	conn.rename("class", "classNew")		重命名key,当试图重命名一个不存在的key则报错
+	conn.type("classNew")					获得key的值类型
 	
