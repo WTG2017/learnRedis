@@ -1,104 +1,10 @@
 1:redisçš„äº”ç§åŸºç¡€æ•°æ®ç±»å‹String,List(æ•°æ®å¯é‡å¤),Set(æ— åº),Hash,Zset(æœ‰åº)
 
-<<<<<<< HEAD
-	1-1:»ù´¡ÃüÁîĞĞ²Ù×÷String	set age 12
+	1-1:åŸºç¡€å‘½ä»¤è¡Œæ“ä½œString	set age 12
 								get age
 								del age
 	
-	1-2:»ù´¡ÃüÁîĞĞ²Ù×÷List		lpush/rpush(×óÓÒÁ½¶Ë²åÈëÊı¾İ)						
-								lrange(»ñµÃÖ¸¶¨·¶Î§µÄÊı¾İ[0,-1]½«»ñµÃÈ«²¿)				
-								lindex(»ñµÃÖ¸¶¨Ä³¸öÏÂ±êÎ»ÖÃµÄÖµ)		
-								lpop/rpop(µ¯³öÁ½¶ËÖµ)
-								
-	1-3:»ù´¡ÃüÁîĞĞ²Ù×÷Set		
-								sadd(Ïò¼¯ºÏÖĞÌí¼ÓÊı¾İ,ÈôÊı¾İÒÑ´æÔÚÔò»á·µ»Ø0)		
-								smembers(»ñµÃ¼¯ºÏµÄËùÓĞÊı¾İ)							
-								sismember(¼ì²éÄ³ÖµÊÇ·ñ´æÔÚÓÚ¼¯ºÏÖĞ)		
-								srem(¼¯ºÏÖĞÉ¾³ıÄ³¸öÖµ)
-								
-	1-4:»ù´¡ÃüÁîĞĞ²Ù×÷Hash		
-								hset person name tom(name²»¿ÉÖØ¸´,nameÖµ»á±»ĞŞ¸Ä)	
-								hgetall(»ñµÃËùÓĞµÄÊôĞÔºÍÊôĞÔÖµ)							
-								hdel person name(É¾³ıÄ³¸öÊôĞÔ)
-								
-	1-5:»ù´¡ÃüÁîĞĞ²Ù×÷Zset		
-								zadd class 100 student(»á¸ù¾İÌí¼ÓµÄ100ÅÅĞò)			
-								zrange class 0 -1 withscores(»á¸ù¾İscoresÅÅĞò²éÑ¯)
-								zrangebyscore class 0 80 withscores(¸ù¾İÇø¼ä²éÑ¯)
-								zrem class student1(É¾³ı)
-
-2:PythonÖĞÊ¹ÓÃredisÄ£¿éÒ»Ğ©»ù´¡²Ù×÷
-	2-1:Á´½ÓredisµÄ·½Ê½Ö®Ò»		conn = redis.Redis(host="127.0.0.1", port=6379, password="123456")
-	
-	2-2-1:Ìí¼ÓÒ»¸östringÀàĞÍ	conn.set("name","tom")	
-								ÆäËü²ÎÊı: 
-									ex=100[100Ãë¹ıÆÚ]	
-									px=100[100ºÁÃë¹ıÆÚ]	
-									nx[ÎªtrueÊ±Ö»ÓĞ"name"²»´æÔÚ²Å»áÖ´ĞĞ,´æÔÚÔòĞÂÖµ²»»á±»¸üĞÂ]
-									xx[ÎªtrueÊ±Ö»ÓĞ"name"´æÔÚ²Å»áÖ´ĞĞ]
-									
-	2-2-2:ÅúÁ¿Ìí¼Ó/»ñµÃstringÀàĞÍ	conn.mset({'k1': 'v1', "k2": 'v2'})		¸Ã·½·¨ÎŞ·¨ÉèÖÃ¹ıÆÚÊ±¼äµÈĞÅÏ¢£¿
-									conn.mget({"k1", "k2"})				ÅúÁ¿»ñµÃ
-	2-2-3:ÉèÖÃÖµ²¢ÇÒ·µ»ØÔ­Ê¼Öµ		conn.getset("key1", "new k1")			Èç¹ûkey²»´æÔÚ,½«»áĞÂ½¨,·µ»ØNONE
-	2-2-3:½ØÈ¡ÖµµÃ²¿·Ö				conn.getrange("k1", 0, 3)			·µ»Ønew		[0, -1]»ñµÃÈ«²¿		conn.getrange("k1", -6, -1)Ò»Ñù¿ÉÒÔ»ñµÃ¡£ĞèÒªÑĞ¾¿½ØÈ¡²ßÂÔ   
-	2-2-4:´ÓÖ¸¶¨Î»ÖÃ¿ªÊ¼ĞŞ¸ÄÖµ		conn.setrange("k1", 3, "22222")			·µ»ØĞŞ¸Äºó³¤¶È
-	2-2-5:×Ö·û´®³¤¶È				conn.strlen("k1")				11
-	2-2-6:×ÔÔö						conn.incr("int",amount=2)			amount ²½³¤		²»Ğ´Ä¬ÈÏÎª1
-									conn.incrbyfloat("int",amount=1.5)		²½³¤Îª¸¡µãÊı
-	2-2-7:×Ô¼õ						conn.decr()
-	2-2-8:×·¼Ó						conn.append("name","lisi")
-	
-	2-3-1:Ìí¼ÓÒ»¸öhash				conn.hset("person", "name", "tom")
-	2-3-2:»ñµÃ×ÖµäËùÓĞµÄ×Ö¶ÎÓëÖµ	conn.hgetall("person")										»ñµÃÖ¸¶¨:conn.hget("person", "age")
-	2-3-3:ÅúÁ¿´´½¨					conn.hmset("newPerson", {"name": "tonynew", "age": "new"})	ÅúÁ¿»ñµÃ:conn.hmget("newPerson", {"name", "age"})
-	2-3-4:»ñµÃ×Öµä×Ö¶ÎÊıÁ¿³¤¶È		conn.hlen("newPerson")
-	2-3-5:ÅĞ¶ÏÊÇ·ñ´æÔÚÄ³¼ü			conn.hexists("newPerson", "sex")
-	2-3-6:É¾³ıÄ³¼ü					conn.hdel("newPerson", "sex")
-	2-3-7:¼üÖµ×ÔÔö					conn.hincrby("school", "clazz", amount=1)
-									conn.hincrbyfloat("school", "clazz", amount=0.4)
-									
-	2-4-1:Ìí¼ÓÒ»¸öListt						conn.lpush("like", "1", "2", "3")	conn.rpush("like", "4")		3,2,1,4
-	2-4-2:×óÓÒ¶ËÌí¼ÓÇÒ¼ü´æÔÚ				conn.lpushx conn.rpushx
-	2-4-3:»ñµÃlist³¤¶È						conn.llen("like")
-	2-4-4:ÔÚinsert1Ö®Ç°²åÈëinsert0			conn.linsert("like", "before", "insert1", "insert0")
-	2-4-5:Í¨¹ıÏÂ±êĞŞ¸ÄÄ³Öµ					conn.lset("like", 0, "new")
-	2-4-6:É¾³ı°üº¬insert0µÄºóÁ½Î» 			conn.lrem("like", 2, "insert0")
-	2-4-7:×óÓÒÁ½¶Ëµ¯³ö						conn.lpop("like")	conn.rpop("like")
-	2-4-8:Í¨¹ıÏÂ±ê»ñµÃ						conn.lindex("like", 1)
-	2-4-9:Í¨¹ıÏÂ±ê·¶Î§»ñµÃ					conn.lrange("like", 0, 3)
-	2-4-10:»áÇå¿Õ²»ÔÚÖ¸¶¨ÏÂ±ê·¶Î§ÄÚµÄÊı¾İ	conn.ltrim("like", 0, 3)
-	
-	2-5-1:Ìí¼ÓÒ»¸öset(ÎŞĞòÇÒÖµ²»ÄÜÖØ¸´)		conn.sadd("clazz", "tom", "tony", "eric", "tony")
-	2-5-2:»ñµÃ¼¯ºÏËùÓĞµÄÖµ					conn.smembers("clazz")
-	2-5-3:ÅĞ¶ÏÊÇ·ñ´æÔÚÄ³Öµ					conn.sismember("clazz", "tom")
-	2-5-4:¼¯ºÏ³¤¶È							conn.scard("clazz")
-	2-5-5:±È½Ï¶à¼¯ºÏµÄ²»Í¬Öµ				conn.sdiff("clazz", "clazz1", "clazz2")
-	2-5-6:±È½Ï¶à¼¯ºÏµÄÏàÍ¬Öµ				conn.sinter("clazz", "clazz1", "clazz2")
-	2-5-7:µ¯³öÓÒ²à							conn.spop("clazz1")
-	2-5-8:Ëæ»úÈ¡³öÁ½¸öÖµ					conn.srandmember("clazz1", 2)
-	2-5-8:É¾³ıÄ³Öµ							conn.srem("clazz1", "tom2")
-	
-	2-6-1:Ìí¼ÓÒ»¸öÓĞĞò¼¯ºÏ					conn.zadd("item", {"v1": 1, "v2": 2, "v3": 3})
-	2-6-2:»ñµÃ¼¯ºÏ³¤¶È						conn.zcard("item")
-	2-6-3:»ñµÃ¼¯ºÏÖĞ1µ½1.5µÄÖµ				conn.zcount("item", 0, 1.5)
-	2-6-4:ÏÂ±ê»ñµÃ							conn.zrange("class", 0, 2)
-											conn.zrevrange("class", 0, 2)    ´Ó´óµ½Ğ¡ÅÅĞò·µ»Ø
-	2-6-5:¸ù¾İ·ÖÖµÇø¼ä²éÑ¯ 					conn.zrangebyscore("class", 80, 90)
-	2-6-6:¸ù¾İ·ÖÖµÇø¼äÉ¾³ı					conn.zremrangebyscore("class", 80, 90)
-	
-3:ÆäËü»ù´¡²Ù×÷
-	conn.delete("hi")						É¾³ıÖ¸¶¨key
-	conn.exists("hi")						Ö¸¶¨keyÊÇ·ñ´æÔÚ
-	conn.randomkey()						Ëæ»úÈ¡³öµ±Ç°´æÔÚµÄkey
-	conn.rename("class", "classNew")		ÖØÃüÃûkey,µ±ÊÔÍ¼ÖØÃüÃûÒ»¸ö²»´æÔÚµÄkeyÔò±¨´í
-	conn.type("classNew")					»ñµÃkeyµÄÖµÀàĞÍ
-	
-=======
-	1-1:åŸºç¡€å‘½ä»¤è¡Œæ“ä½œString				  set age 12
-								get age
-								del age
-	
-	1-2:åŸºç¡€å‘½ä»¤è¡Œæ“ä½œList					  lpush/rpush(å·¦å³ä¸¤ç«¯æ’å…¥æ•°æ®)						
+	1-2:åŸºç¡€å‘½ä»¤è¡Œæ“ä½œList		lpush/rpush(å·¦å³ä¸¤ç«¯æ’å…¥æ•°æ®)						
 								lrange(è·å¾—æŒ‡å®šèŒƒå›´çš„æ•°æ®[0,-1]å°†è·å¾—å…¨éƒ¨)				
 								lindex(è·å¾—æŒ‡å®šæŸä¸ªä¸‹æ ‡ä½ç½®çš„å€¼)		
 								lpop/rpop(å¼¹å‡ºä¸¤ç«¯å€¼)
@@ -121,9 +27,9 @@
 								zrem class student1(åˆ é™¤)
 
 2:Pythonä¸­ä½¿ç”¨redisæ¨¡å—ä¸€äº›åŸºç¡€æ“ä½œ
-	2-1:é“¾æ¥redisçš„æ–¹å¼ä¹‹ä¸€				  conn = redis.Redis(host="127.0.0.1", port=6379, password="123456")
+	2-1:é“¾æ¥redisçš„æ–¹å¼ä¹‹ä¸€		conn = redis.Redis(host="127.0.0.1", port=6379, password="123456")
 	
-	2-2-1:æ·»åŠ ä¸€ä¸ªstringç±»å‹				  conn.set("name","tom")	
+	2-2-1:æ·»åŠ ä¸€ä¸ªstringç±»å‹	conn.set("name","tom")	
 								å…¶å®ƒå‚æ•°: 
 									ex=100[100ç§’è¿‡æœŸ]	
 									px=100[100æ¯«ç§’è¿‡æœŸ]	
@@ -161,7 +67,7 @@
 	2-4-9:é€šè¿‡ä¸‹æ ‡èŒƒå›´è·å¾—					conn.lrange("like", 0, 3)
 	2-4-10:ä¼šæ¸…ç©ºä¸åœ¨æŒ‡å®šä¸‹æ ‡èŒƒå›´å†…çš„æ•°æ®	conn.ltrim("like", 0, 3)
 	
-	2-5-1:æ·»åŠ ä¸€ä¸ªset(æ— åºä¸”å€¼ä¸èƒ½é‡å¤)			conn.sadd("clazz", "tom", "tony", "eric", "tony")
+	2-5-1:æ·»åŠ ä¸€ä¸ªset(æ— åºä¸”å€¼ä¸èƒ½é‡å¤)		conn.sadd("clazz", "tom", "tony", "eric", "tony")
 	2-5-2:è·å¾—é›†åˆæ‰€æœ‰çš„å€¼					conn.smembers("clazz")
 	2-5-3:åˆ¤æ–­æ˜¯å¦å­˜åœ¨æŸå€¼					conn.sismember("clazz", "tom")
 	2-5-4:é›†åˆé•¿åº¦							conn.scard("clazz")
@@ -174,5 +80,14 @@
 	2-6-1:æ·»åŠ ä¸€ä¸ªæœ‰åºé›†åˆ					conn.zadd("item", {"v1": 1, "v2": 2, "v3": 3})
 	2-6-2:è·å¾—é›†åˆé•¿åº¦						conn.zcard("item")
 	2-6-3:è·å¾—é›†åˆä¸­1åˆ°1.5çš„å€¼				conn.zcount("item", 0, 1.5)
+	2-6-4:ä¸‹æ ‡è·å¾—							conn.zrange("class", 0, 2)
+											conn.zrevrange("class", 0, 2)    ä»å¤§åˆ°å°æ’åºè¿”å›
+	2-6-5:æ ¹æ®åˆ†å€¼åŒºé—´æŸ¥è¯¢ 					conn.zrangebyscore("class", 80, 90)
+	2-6-6:æ ¹æ®åˆ†å€¼åŒºé—´åˆ é™¤					conn.zremrangebyscore("class", 80, 90)
 	
->>>>>>> 5bea84e44005d69983b528dd37a92094b0272023
+3:å…¶å®ƒåŸºç¡€æ“ä½œ
+	conn.delete("hi")						åˆ é™¤æŒ‡å®škey
+	conn.exists("hi")						æŒ‡å®škeyæ˜¯å¦å­˜åœ¨
+	conn.randomkey()						éšæœºå–å‡ºå½“å‰å­˜åœ¨çš„key
+	conn.rename("class", "classNew")		                é‡å‘½åkey,å½“è¯•å›¾é‡å‘½åä¸€ä¸ªä¸å­˜åœ¨çš„keyåˆ™æŠ¥é”™
+	conn.type("classNew")					        è·å¾—keyçš„å€¼ç±»å‹
